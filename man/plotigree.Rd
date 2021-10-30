@@ -32,5 +32,5 @@ This function uses UA crossing records to quickly assemble a pedigree matrix.
 }
 \examples{
 plotigree(habsburg, "Ferdinand III HRE")
-plotigree(habsburg, "Charles II of Spain", method = "CA")
+plotigree(habsburg, "Charles the Bewitched", method = "CA")
 }

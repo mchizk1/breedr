@@ -18,7 +18,7 @@
 #' @export
 #' @examples
 #' plotigree(habsburg, "Ferdinand III HRE")
-#' plotigree(habsburg, "Charles II of Spain", method = "CA")
+#' plotigree(habsburg, "Charles the Bewitched", method = "CA")
 
 plotigree <- function(breedr, genotype, n = 4, orientation = "TB", method = "FULL"){
   breedr <- new_breedr(breedr)
