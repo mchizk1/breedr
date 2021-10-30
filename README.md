@@ -15,5 +15,5 @@ An R package for analyzing and visualizing pedigrees
 Simply run the following two lines of code in an R session
 
        install.packages("devtools")
-       devtools::install_github("mchizk1/fRuit")
+       devtools::install_github("mchizk1/breedr")
        
