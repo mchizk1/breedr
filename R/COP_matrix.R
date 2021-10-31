@@ -33,8 +33,7 @@ breedr_COP <- function(breedr){
   diagonal <- 1
   for(i in genotypes){
     assertthat::assert_that(i %in% breedr$Ind,
-                            msg = paste0(i, " was not found in UA germplasm dataset.
-                           Please contact tmchizk@uark.edu if this is incorrect"))
+                            msg = paste0(i, " was not found in the dataset provided."))
     idxi <- ped_idx(i, breedr = breedr)
     count <- 1
     COP_vec <- rep(0, length(genotypes))

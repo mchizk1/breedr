@@ -155,8 +155,7 @@ wrights_f <- function(breedr, iteration){
                          current = ">")
   for(i in genotype){
     assertthat::assert_that(i %in% breedr$Ind,
-                            msg = paste0(i, " was not found in the breedr object
-                                         provided"))
+                            msg = paste0(i, " was not found in the breedr object provided"))
     pb$tick(tokens = list("it" = iteration))
     parents <- dplyr::filter(breedr, Ind == i)
     # This conditional handles selfing (same parent in both columns)

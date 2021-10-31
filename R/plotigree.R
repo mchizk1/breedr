@@ -28,8 +28,7 @@ plotigree <- function(breedr, genotype, n = 4, orientation = "TB", method = "FUL
                           msg = "orientation must be one of the following: TB, LR, or RL")
   genotype <- nameR(genotype)
   assertthat::assert_that(genotype %in% nameR(breedr$Ind),
-                          msg = paste0(genotype, " was not found in the provided
-                                       breedr object"))
+                          msg = paste0(genotype, " was not found in the provided breedr object"))
   assertthat::assert_that(assertthat::is.count(n),
                           msg = "n must be a positive integer")
   assertthat::assert_that(method %in% c("FULL", "CA"),
@@ -108,7 +107,7 @@ assembledot <- function(nodedef, nodelab=NULL, edgedef, orientation){
 # This function supports the CA method of pedigree plotting
 #===============================================================================
 
-CA_method <- function(breedr, genotype, n, orientation){
+CA_method <- function(breedr, genotype, n, orientation = "TB"){
   # Assembling data needed for CA method of plotting
   parents <- dplyr::filter(breedr, Ind == genotype)
   P1 <- ped_idx(parents$Par1, breedr)
@@ -172,7 +171,7 @@ CA_method <- function(breedr, genotype, n, orientation){
     }
   }
   dotscript <- assembledot(nodedef = nodedef, edgedef = edgedef,
-                           orientation = "TB")
+                           orientation = orientation)
   return(dotscript)
 }
 

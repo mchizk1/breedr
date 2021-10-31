@@ -9,13 +9,10 @@
 #' the resulting breedr object.
 #' @examples
 #' habsburg_breedr <- new_breedr(habsburg)
-#' @export
 
 new_breedr <- function(dataset){
-  assertthat::assert_that(is.data.frame(dataset), msg = "input dataset must be a
-                          data.frame or something that may be coerced into one")
-  assertthat::assert_that(ncol(dataset) == 3, msg = "input data.frame must contain
-                          exactly three columns")
+  assertthat::assert_that(is.data.frame(dataset), msg = "input dataset must be a data.frame or something that may be coerced into one")
+  assertthat::assert_that(ncol(dataset) == 3, msg = "Input data.frame must contain exactly three columns. See the habsburg dataset for an example.")
   colnames(dataset) <- c("Ind", "Par1", "Par2")
   dataset$Ind <- nameR(dataset$Ind)
   dataset$Par1 <- nameR(dataset$Par1)

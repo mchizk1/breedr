@@ -14,6 +14,40 @@ An R package for analyzing and visualizing pedigrees
 
 Simply run the following two lines of code in an R session
 
-       install.packages("devtools")
-       devtools::install_github("mchizk1/breedr")
+    install.packages("devtools")
+    devtools::install_github("mchizk1/breedr")
+    
+### breedr input format - the Habsburg Dynasty example
+
+Run the following to see an example of the simple 3-column format required for breedr datasets.
+Column 1 - individual ID
+Column 2 - female parent ID
+Column 3 - male parent ID
+
+    library(breedr)
+    head(breedr)
        
+### Plotigree() Demonstration
+
+The "FULL" (default) method displays the entire tree with color coding for parental sex:
+
+    plotigree(habsburg, "charles the bewitched", orientation "RL")
+    
+![FULL](https://github.com/mchizk1/breedr/blob/main/FULL_method.png)
+    
+The "CA" method displays a similar tree, but is consolidated by common ancestry.
+Common ancestors are highlighted in yellow:
+    
+    plotigree(habsburg, "charles the bewitched", method = "CA")
+    
+![CA](https://github.com/mchizk1/breedr/blob/main/CA_method.png)
+       
+### Inbreeding and Kinship Statistics
+
+To calculate the inbreeding coefficients (F) of all unique individuals in a dataset, run this:
+
+    breedr_F(habsburg)
+
+And for a kinship matrix (coefficients of parentage), run this (this one can take a while): 
+
+    breedr_COP(habsburg)
