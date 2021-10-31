@@ -19,13 +19,13 @@ Simply run the following two lines of code in an R session
     
 ### breedr input format - the Habsburg Dynasty example
 
-Run the following to see an example of the simple 3-column format required for breedr datasets.
+Once upon a time, in a far away land, there lived a king who was very inbred. Run the following to see an example of the simple 3-column format required for breedr datasets.
 Column 1 - individual ID
 Column 2 - female parent ID
 Column 3 - male parent ID
 
     library(breedr)
-    head(breedr)
+    head(habsburg)
        
 ### Plotigree() Demonstration
 
