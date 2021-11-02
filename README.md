@@ -34,7 +34,7 @@ representations of family tree plots.
 
 The "FULL" (default) method displays the entire tree with color coding for parental sex:
 
-    plotigree(habsburg, "charles the bewitched", orientation "LR")
+    plotigree(habsburg, "charles the bewitched", orientation = "LR")
     
 ![FULL](https://github.com/mchizk1/breedr/blob/main/FULL_method.png)
     
