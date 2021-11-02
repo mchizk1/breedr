@@ -4,11 +4,14 @@
 \alias{breedr_COP}
 \title{Coefficients of Parentage for UA blackberry program}
 \usage{
-breedr_COP(breedr)
+breedr_COP(breedr, genotypes = NULL)
 }
 \arguments{
 \item{breedr}{A data.frame containing three columns: individual, female parent,
 and male parent}
+
+\item{genotypes}{A vector of character strings indicating a subset of individuals
+to calculate COPs for. By default, all individuals in the breedr dataset are included.}
 }
 \value{
 A numeric square matrix containing COP's for the requested

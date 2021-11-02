@@ -25,6 +25,7 @@ new_breedr <- function(dataset){
       dataset <- rbind(dataset, c(dataset$Par2[i], NA, NA))
     }
   }
+  dataset <- dataset[!is.na(dataset$Ind),]
   assertthat::assert_that(length(dataset$Ind) == length(unique(dataset$Ind)),
                           msg = paste0("Input data contains duplicate individuals: ",
                                        duplicated(dataset$Ind),

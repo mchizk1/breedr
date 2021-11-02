@@ -6,14 +6,18 @@
 #'
 #' @param breedr A data.frame containing three columns: individual, female parent,
 #' and male parent
+#' @param genotypes A vector of character strings indicating a subset of individuals
+#' to calculate COPs for. By default, all individuals in the breedr dataset are included.
 #' @return A numeric square matrix containing COP's for the requested
 #' @examples
 #' breedr_COP(habsburg)
 #' @export
 
-breedr_COP <- function(breedr){
+breedr_COP <- function(breedr, genotypes = NULL){
   breedr <- new_breedr(breedr)
-  genotypes = breedr$Ind
+  if(is.null(genotypes)){
+    genotypes = breedr$Ind
+  }
   assertthat::assert_that(is.vector(genotypes), is.character(genotypes),
                           msg= "genotype must be a character vector or string")
   total <- 0
