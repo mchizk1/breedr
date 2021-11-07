@@ -8,6 +8,7 @@ An R package for analyzing and visualizing pedigrees
 * `plotigree()` - Quick assembly of pedigrees plots
 * `breedr_f()` - Calculates Wright's F statistic from pedigree data
 * `breedr_COP()` - Computes a Coefficient of Parentage matrix from pedigree data
+* `vlookup()` - A function that imitates Excel's vlookup.  Helpful for going from selection numbers to cultivar names.
 * `habsburg` - A small set of pedigree data from an infamously inbred royal family...
 
 ### Installation Instructions
