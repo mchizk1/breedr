@@ -4,12 +4,22 @@
 \alias{new_breedr}
 \title{A constructor function for breedr objects}
 \usage{
-new_breedr(dataset)
+new_breedr(dataset, str_ops, na_val)
 }
 \arguments{
 \item{dataset}{A data.frame with exactly three columns: Individuals, female parents,
 and male parents. The input column names are arbitrary and will be renamed in
 the resulting breedr object.}
+
+\item{str_ops}{A character vector containing optional methods for string manipulation.
+Possible options include: \cr
+'strip_ws' (default) - Strip leading and trailing white space. \cr
+'upper' (default) - Make all uppercase to eliminate case differences.\cr
+'lower' - Make all lowercase to eliminate case differences.  Cannot be combined with 'upper'. \cr
+'shrink_ws' (default) - remove duplicated white space from center of strings. \cr
+NULL is acceptable to skip string manipulation}
+
+\item{na_val}{An optional string indicating a value to be treated as missing.}
 }
 \description{
 This function takes a data.frame containing breeding records and constructs a

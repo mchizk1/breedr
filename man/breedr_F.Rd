@@ -4,11 +4,21 @@
 \alias{breedr_F}
 \title{Wright's F statistic}
 \usage{
-breedr_F(breedr)
+breedr_F(breedr, str_ops = c("strip_ws", "upper", "shrink_ws"), na_val = NULL)
 }
 \arguments{
 \item{breedr}{A data.frame containing three columns: individual, female parent,
 and male parent}
+
+\item{str_ops}{A character vector containing optional methods for string manipulation.
+Possible options include: \cr
+'strip_ws' (default) - Strip leading and trailing white space. \cr
+'upper' (default) - Make all uppercase to eliminate case differences.\cr
+'lower' - Make all lowercase to eliminate case differences.  Cannot be combined with 'upper'. \cr
+'shrink_ws' (default) - remove duplicated white space from center of strings. \cr
+NULL is acceptable to skip string manipulation}
+
+\item{na_val}{An optional string indicating a value to be treated as missing.}
 }
 \value{
 A data.frame containing inbreeding statistics of all individuals in

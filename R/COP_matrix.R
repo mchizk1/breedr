@@ -8,13 +8,22 @@
 #' and male parent
 #' @param genotypes A vector of character strings indicating a subset of individuals
 #' to calculate COPs for. By default, all individuals in the breedr dataset are included.
+#' @param str_ops A character vector containing optional methods for string manipulation.
+#' Possible options include: \cr
+#' 'strip_ws' (default) - Strip leading and trailing white space. \cr
+#' 'upper' (default) - Make all uppercase to eliminate case differences.\cr
+#' 'lower' - Make all lowercase to eliminate case differences.  Cannot be combined with 'upper'. \cr
+#' 'shrink_ws' (default) - remove duplicated white space from center of strings. \cr
+#' NULL is acceptable to skip string manipulation
+#' @param na_val An optional string indicating a value to be treated as missing.
 #' @return A numeric square matrix containing COP's for the requested
 #' @examples
 #' breedr_COP(habsburg)
 #' @export
 
-breedr_COP <- function(breedr, genotypes = NULL){
-  breedr <- new_breedr(breedr)
+breedr_COP <- function(breedr, genotypes = NULL,
+                       str_ops = c("strip_ws", "upper", "shrink_ws"), na_val = NULL){
+  breedr <- new_breedr(breedr, str_ops, na_val)
   if(is.null(genotypes)){
     genotypes = breedr$Ind
   }
@@ -31,7 +40,7 @@ breedr_COP <- function(breedr, genotypes = NULL){
                                    incomplete = "-",
                                    current = ">")
   COP <- matrix(nrow = length(genotypes), ncol = length(genotypes))
-  genotypes <- nameR(genotypes)
+  genotypes <- nameR(genotypes, str_ops, na_val)
   rownames(COP) <- genotypes
   colnames(COP) <- genotypes
   diagonal <- 1

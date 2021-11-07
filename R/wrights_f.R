@@ -143,7 +143,6 @@ distinct_ca <- function(Par_idx, ca, breedr){
 
 wrights_f <- function(breedr, iteration){
   genotype = breedr$Ind
-  genotype <- nameR(genotype)
   assertthat::assert_that(is.vector(genotype), is.character(genotype),
                           msg= "genotype must be a character vector or string")
   F_unadjusted <- c()
@@ -189,14 +188,22 @@ wrights_f <- function(breedr, iteration){
 #'
 #' @param breedr A data.frame containing three columns: individual, female parent,
 #' and male parent
+#' @param str_ops A character vector containing optional methods for string manipulation.
+#' Possible options include: \cr
+#' 'strip_ws' (default) - Strip leading and trailing white space. \cr
+#' 'upper' (default) - Make all uppercase to eliminate case differences.\cr
+#' 'lower' - Make all lowercase to eliminate case differences.  Cannot be combined with 'upper'. \cr
+#' 'shrink_ws' (default) - remove duplicated white space from center of strings. \cr
+#' NULL is acceptable to skip string manipulation
+#' @param na_val An optional string indicating a value to be treated as missing.
 #' @return A data.frame containing inbreeding statistics of all individuals in
 #' the input data.frame
 #' @examples
 #' breedr_F(habsburg)
 #' @export
 
-breedr_F <- function(breedr){
-  breedr <- new_breedr(breedr)
+breedr_F <- function(breedr, str_ops = c("strip_ws", "upper", "shrink_ws"), na_val = NULL){
+  breedr <- new_breedr(breedr, str_ops, na_val)
   breedr$F_stat <- 0
   breedr$F_stat <- wrights_f(breedr, 1)
   breedr$F_stat <- wrights_f(breedr, 2)

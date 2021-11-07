@@ -14,20 +14,29 @@
 #' @param method (default = FULL) A string indicating the method for plotting a
 #' pedigree.  Options: 'FULL' for a full pedigree with parental sex color formatting.
 #' 'CA' for grouped Common Ancestors.
+#' @param str_ops A character vector containing optional methods for string manipulation.
+#' Possible options include: \cr
+#' 'strip_ws' (default) - Strip leading and trailing white space. \cr
+#' 'upper' (default) - Make all uppercase to eliminate case differences.\cr
+#' 'lower' - Make all lowercase to eliminate case differences.  Cannot be combined with 'upper'. \cr
+#' 'shrink_ws' (default) - remove duplicated white space from center of strings. \cr
+#' NULL is acceptable to skip string manipulation
+#' @param na_val An optional string indicating a value to be treated as missing.
 #' @return A plot of assembled pedigree going back n generations.
 #' @export
 #' @examples
 #' plotigree(habsburg, "Ferdinand III HRE")
 #' plotigree(habsburg, "Charles the Bewitched", method = "CA")
 
-plotigree <- function(breedr, genotype, n = 4, orientation = "TB", method = "FULL"){
-  breedr <- new_breedr(breedr)
+plotigree <- function(breedr, genotype, n = 4, orientation = "TB", method = "FULL",
+                      str_ops = c("strip_ws", "upper", "shrink_ws"), na_val = NULL){
+  breedr <- new_breedr(breedr, str_ops, na_val)
   assertthat::assert_that(assertthat::is.string(genotype),
                           msg = "genotype must be a character string")
   assertthat::assert_that(orientation %in% c("TB", "LR", "RL"),
                           msg = "orientation must be one of the following: TB, LR, or RL")
-  genotype <- nameR(genotype)
-  assertthat::assert_that(genotype %in% nameR(breedr$Ind),
+  genotype <- nameR(genotype, str_ops, na_val)
+  assertthat::assert_that(genotype %in% breedr$Ind,
                           msg = paste0(genotype, " was not found in the provided breedr object"))
   assertthat::assert_that(assertthat::is.count(n),
                           msg = "n must be a positive integer")
