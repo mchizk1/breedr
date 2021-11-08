@@ -16,7 +16,7 @@ ped_idx <- function(parent, breedr){
     k <- 0
     for(i in 1:gensz){
       g <- pedvec[counter]
-      parents <- dplyr::filter(breedr, Ind == g)
+      parents <- breedr[grepl(paste0("^",g,"$"), breedr[,1]),]
       colnames(parents) <- NULL
       pedvec <- c(pedvec, unlist(parents[1,2:3]))
       k=k+2
@@ -109,7 +109,7 @@ ca_traceback <- function(P1, P2, breedr){
 
 distinct_ca <- function(Par_idx, ca, breedr){
   if(ca %in% Par_idx$pedvec){
-    ca_group <- dplyr::filter(Par_idx, pedvec == ca)
+    ca_group <- Par_idx[grepl(paste0("^", ca,"$"), Par_idx[,1]),]
     # For each occurrence of common ancestor i...
     for(i in 1:nrow(ca_group)){
       # If the common ancestor is not a dead end...
