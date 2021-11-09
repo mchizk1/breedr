@@ -13,6 +13,7 @@ Imports:
     DiagrammeR,
     dplyr,
     magrittr,
+    purrr,
     stringr
 RoxygenNote: 7.1.2
 Depends: 

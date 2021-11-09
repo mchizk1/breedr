@@ -26,51 +26,31 @@ breedr_COP <- function(breedr, genotypes = NULL,
   breedr <- new_breedr(breedr, str_ops, na_val)
   if(is.null(genotypes)){
     genotypes = breedr$Ind
+  } else {
+    genotypes <- nameR(genotypes, str_ops = str_ops, na_val = na_val)
   }
   assertthat::assert_that(is.vector(genotypes), is.character(genotypes),
                           msg= "genotype must be a character vector or string")
-  total <- 0
-  for(i in 1:length(genotypes)){
-    total = total + i
-  }
-  pb <- progress::progress_bar$new(format =
-          "(:spin) [:bar] :percent [:current out of :total COP's calculated]",
-                                   total = total,
-                                   complete = "=",
-                                   incomplete = "-",
-                                   current = ">")
-  COP <- matrix(nrow = length(genotypes), ncol = length(genotypes))
-  genotypes <- nameR(genotypes, str_ops, na_val)
+  idx <- purrr::map(genotypes, ped_idx, breedr = breedr)
+  names(idx) <- genotypes
+  cross_list <- list(genotypes, genotypes)
+  names(cross_list) <- c("a", "b")
+  pairs <- purrr::cross_df(cross_list)
+  COP <- purrr::map2(.x = pairs$a, .y = pairs$b, .f = COP_compute, idx = idx) %>%
+    unlist() %>%
+    matrix(nrow = length(genotypes))
   rownames(COP) <- genotypes
   colnames(COP) <- genotypes
-  diagonal <- 1
-  for(i in genotypes){
-    assertthat::assert_that(i %in% breedr$Ind,
-                            msg = paste0(i, " was not found in the dataset provided."))
-    idxi <- ped_idx(i, breedr = breedr)
-    count <- 1
-    COP_vec <- rep(0, length(genotypes))
-    for(j in genotypes[1:diagonal]){
-      pb$tick()
-      idxj <- ped_idx(j, breedr = breedr)
-      if(i %in% idxj$pedvec){
-        COP_element <- sum(0.5^dplyr::filter(idxj, pedvec == i)$gidx)
-      } else if (j %in% idxi$pedvec){
-        COP_element <- sum(0.5^dplyr::filter(idxi, pedvec == j)$gidx)
-      } else {
-        COP_element <- 0
-      }
-      COP_vec[count] <- COP_element
-      count = count+1
-    }
-    diagonal = diagonal+1
-    COP[,i] <- COP_vec
-  }
-  COP <- COP + t(COP)
-  for(i in 1:length(genotypes)){
-    COP[i,i] = COP[i,i]/2
-  }
   return(COP)
 }
 
-
+COP_compute <- function(a, b, idx){
+  if(b %in% idx[[a]]$pedvec){
+    COP_element <- sum(0.5^dplyr::filter(idx[[a]], pedvec == b)$gidx)
+  } else if (a %in% idx[[b]]$pedvec){
+    COP_element <- sum(0.5^dplyr::filter(idx[[b]], pedvec == a)$gidx)
+  } else {
+    COP_element <- 0
+  }
+  return(COP_element)
+}
