@@ -1,7 +1,7 @@
 Package: breedr
 Type: Package
 Title: Tools for Analyzing and Visualizing Pedigree Data
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Author: Mason Chizk
 Maintainer: Mason Chizk <tmchizk@uark.edu>
 Description: The breedr provides tools for easily constructing pedigree plots and calculating inbreeding and parentage coefficients.
