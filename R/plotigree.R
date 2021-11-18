@@ -29,7 +29,8 @@
 #' plotigree(habsburg, "Charles the Bewitched", method = "CA")
 
 plotigree <- function(breedr, genotype, n = 4, orientation = "TB", method = "FULL",
-                      str_ops = c("strip_ws", "upper", "shrink_ws"), na_val = NULL){
+                      str_ops = c("strip_ws", "upper", "shrink_ws"), na_val = NULL,
+                      color1 = NULL, color2 = NULL, color3 = NULL){
   breedr <- new_breedr(breedr, str_ops, na_val)
   assertthat::assert_that(assertthat::is.string(genotype),
                           msg = "genotype must be a character string")
@@ -43,9 +44,11 @@ plotigree <- function(breedr, genotype, n = 4, orientation = "TB", method = "FUL
   assertthat::assert_that(method %in% c("FULL", "CA"),
                           msg = "method must be either 'FULL' or 'CA'")
   if (method == "FULL"){
-    dot_script <- FULL_method(breedr, genotype, n, orientation)
+    dot_script <- FULL_method(breedr, genotype, n, orientation, color1 = color1,
+                              color2 = color2, color3 = color3)
   } else if (method == "CA"){
-    dot_script <- CA_method(breedr, genotype, n, orientation)
+    dot_script <- CA_method(breedr, genotype, n, orientation, color1 = color1,
+                            color2 = color2, color3 = color3)
   }
   DiagrammeR::grViz(dot_script)
   #return(dot_script)
@@ -116,7 +119,23 @@ assembledot <- function(nodedef, nodelab=NULL, edgedef, orientation){
 # This function supports the CA method of pedigree plotting
 #===============================================================================
 
-CA_method <- function(breedr, genotype, n, orientation = "TB"){
+CA_method <- function(breedr, genotype, n, orientation = "TB", color1 = color1,
+                      color2 = color2, color3 = color3){
+  if(is.null(color1)){
+    color1 = "Khaki"
+  } else {
+    assertthat::assert_that(assertthat::is.string(color1), msg = "color1 must be a string")
+  }
+  if(is.null(color2)){
+    color2 = "Gray"
+  } else {
+    assertthat::assert_that(assertthat::is.string(color2), msg = "color2 must be a string")
+  }
+  if(is.null(color3)){
+    color3 = "Khaki"
+  } else {
+    assertthat::assert_that(assertthat::is.string(color2), msg = "color3 must be a string")
+  }
   # Assembling data needed for CA method of plotting
   parents <- dplyr::filter(breedr, Ind == genotype)
   P1 <- ped_idx(parents$Par1, breedr)
@@ -135,12 +154,12 @@ CA_method <- function(breedr, genotype, n, orientation = "TB"){
   }
   ca <- unique(ca_detect(P1$pedvec, P2$pedvec))
   # Now it's time to use the assembled data to write a DOT script
-  nodedef <- paste0("'",genotype,"' [style=filled, color=Khaki] \n")
+  nodedef <- paste0("'",genotype,"' [style=filled, color=",color3,"] \n")
   edgedef <- c("\n")
   defined <- c()
   # What happens if the individual resulted from a self?
   if (parents[1,2] == parents[1,3]){
-    dotvec <- writedot(nodeid = parents[1,2], attachid = genotype, color = "Khaki")
+    dotvec <- writedot(nodeid = parents[1,2], attachid = genotype, color = color1)
     nodedef <- paste0(nodedef, dotvec[1])
     edgedef <- paste0(edgedef, dotvec[3])
   } else {
@@ -159,9 +178,9 @@ CA_method <- function(breedr, genotype, n, orientation = "TB"){
         }
         attachid <- dplyr::filter(Pboth, gidx == i-1 & pidx == attach_pos)
         if(active_pos$pedvec %in% ca){
-          color <- "Khaki"
+          color <- color1
         } else {
-          color <- "Gray"
+          color <- color2
         }
         if(!(active_pos$pedvec %in% defined)){
           dotvec <- writedot(nodeid = active_pos$pedvec, attachid = attachid, color = color)
@@ -189,7 +208,23 @@ CA_method <- function(breedr, genotype, n, orientation = "TB"){
 # This function supports the FULL method of pedigree plotting
 #===============================================================================
 
-FULL_method <- function(breedr, genotype, n, orientation = "TB"){
+FULL_method <- function(breedr, genotype, n, orientation = "TB", color1 = color1,
+                        color2 = color2, color3 = color3){
+  if(is.null(color1)){
+    color1 = "PaleTurquoise"
+  } else {
+    assertthat::assert_that(assertthat::is.string(color1), msg = "color1 must be a string")
+  }
+  if(is.null(color2)){
+    color2 = "Pink"
+  } else {
+    assertthat::assert_that(assertthat::is.string(color2), msg = "color2 must be a string")
+  }
+  if(is.null(color3)){
+    color3 = "Thistle"
+  } else {
+    assertthat::assert_that(assertthat::is.string(color2), msg = "color3 must be a string")
+  }
   nodecount <- 2
   nodebase <- 1
   nodeloop <- 1
@@ -199,7 +234,7 @@ FULL_method <- function(breedr, genotype, n, orientation = "TB"){
   pvec_new <- c()
   label_idx <- data.frame(label=c(), node=c())
   gensz <-1
-  nodedef<-paste0((1)," [label = '@@1', style=filled, color=Thistle] \n")
+  nodedef<-paste0((1)," [label = '@@1', style=filled, color=",color3," ] \n")
   nodelab<-paste0("[",1,"]: '",genotype,"' \n")
   edgedef<-c()
   # This loop was created to trace back pedigrees using the requested number of
@@ -213,12 +248,12 @@ FULL_method <- function(breedr, genotype, n, orientation = "TB"){
       colnames(parents) <- NULL
       pvec_new <- c(pvec_new, unlist(parents[1,2:3]))
       if(!is.na(parents[1,2]) & !is.na(parents[1,3])){
-        dotvec <- writedot(nodecount, parents[1,2], attachid[j], color = "Pink")
+        dotvec <- writedot(nodecount, parents[1,2], attachid[j], color = color2)
         nodedef <- paste0(nodedef, dotvec[1])
         nodelab <- paste0(nodelab, dotvec[2])
         edgedef <- paste0(edgedef, dotvec[3])
         nodecount=nodecount+1
-        dotvec <- writedot(nodecount, parents[1,3], attachid[j], color = "PaleTurquoise")
+        dotvec <- writedot(nodecount, parents[1,3], attachid[j], color = color1)
         nodedef <- paste0(nodedef, dotvec[1])
         nodelab <- paste0(nodelab, dotvec[2])
         edgedef <- paste0(edgedef, dotvec[3])
@@ -227,7 +262,7 @@ FULL_method <- function(breedr, genotype, n, orientation = "TB"){
         pvec <- c(parents[1,2:3])
         k=k+2
       } else if (!is.na(parents[1,2]) & is.na(parents[1,3])){
-        dotvec <- writedot(nodecount, parents[1,2], attachid[j], color = "Pink")
+        dotvec <- writedot(nodecount, parents[1,2], attachid[j], color = color2)
         nodedef <- paste0(nodedef, dotvec[1])
         nodelab <- paste0(nodelab, dotvec[2])
         edgedef <- paste0(edgedef, dotvec[3])
@@ -235,7 +270,7 @@ FULL_method <- function(breedr, genotype, n, orientation = "TB"){
         nodeloc <- c(nodeloc, k)
         k=k+1
       } else if (is.na(parents[1,2]) & !is.na(parents[1,3])){
-        dotvec <- writedot(nodecount, parents[1,3], attachid[j], color = "PaleTurquoise")
+        dotvec <- writedot(nodecount, parents[1,3], attachid[j], color = color1)
         nodedef <- paste0(nodedef, dotvec[1])
         nodelab <- paste0(nodelab, dotvec[2])
         edgedef <- paste0(edgedef, dotvec[3])

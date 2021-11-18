@@ -11,7 +11,10 @@ plotigree(
   orientation = "TB",
   method = "FULL",
   str_ops = c("strip_ws", "upper", "shrink_ws"),
-  na_val = NULL
+  na_val = NULL,
+  color1 = NULL,
+  color2 = NULL,
+  color3 = NULL
 )
 }
 \arguments{

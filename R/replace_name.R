@@ -1,8 +1,8 @@
 #' Name Conversions
 #'
-#' \code{vlookup} mimics Excel's vlookup function, which replaces values by
-#' looking up name pairs from a key. For example, this may be be helpful when
-#' switching from selection codes to cultivar names.
+#' \code{replace_name()} replaces values by looking up name pairs from a key. This is
+#' similar to Excel's vlookup function and may be helpful when switching from
+#' selection codes to cultivar names.
 #'
 #' @param data_vec A character vector of ID codes to be replaced
 #' @param key_old A character vector containing ID codes matching those of \code{data_vec}.
@@ -16,10 +16,10 @@
 #' originals <- c("A-544", "A-730", "A-876", "A-1790")
 #' key_old <- c("A-544", "A-730", "A-876")
 #' key_new <- c("Cheyenne", "Shawnee", "Choctaw")
-#' vlookup(originals, key_old, key_new)
+#' replace_name(originals, key_old, key_new)
 #' @export
 
-vlookup <- function(data_vec, key_old, key_new){
+replace_name <- function(data_vec, key_old, key_new){
   assertthat::assert_that(is.character(data_vec), is.vector(data_vec),
               is.character(key_old), is.vector(key_old),
               is.character(key_new), is.vector(key_new),
