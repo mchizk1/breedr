@@ -44,9 +44,18 @@ Possible options include: \cr
 NULL is acceptable to skip string manipulation}
 
 \item{na_val}{An optional string indicating a value to be treated as missing.}
+
+\item{color1}{The primary color. In the "FULL" method, this is the male parent
+and in the "CA" method this is the common ancestors.}
+
+\item{color2}{The secondary color. In the "FULL" method, this is the female parent
+and in the "CA" method, this is the non-common ancestors.}
+
+\item{color3}{The tertiary color. In both methods, this is the color of the individual
+indicated in the \code{genotype} argument}
 }
 \value{
-A plot of assembled pedigree going back n generations.
+A plot of assembled pedigree going back \code{n} generations.
 }
 \description{
 This function uses UA crossing records to quickly assemble a pedigree matrix.

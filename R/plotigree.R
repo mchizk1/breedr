@@ -22,7 +22,13 @@
 #' 'shrink_ws' (default) - remove duplicated white space from center of strings. \cr
 #' NULL is acceptable to skip string manipulation
 #' @param na_val An optional string indicating a value to be treated as missing.
-#' @return A plot of assembled pedigree going back n generations.
+#' @param color1 The primary color. In the "FULL" method, this is the male parent
+#' and in the "CA" method this is the common ancestors.
+#' @param color2 The secondary color. In the "FULL" method, this is the female parent
+#' and in the "CA" method, this is the non-common ancestors.
+#' @param color3 The tertiary color. In both methods, this is the color of the individual
+#' indicated in the \code{genotype} argument
+#' @return A plot of assembled pedigree going back \code{n} generations.
 #' @export
 #' @examples
 #' plotigree(habsburg, "Ferdinand III HRE")
