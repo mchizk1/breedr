@@ -7,9 +7,9 @@
 \format{
 A data frame with 203 rows and 4 variables:
 \describe{
-  \item{Ind}{Names of individuals in the Habsburg royal line}
-  \item{Par1}{Mothers of individuals in the Habsburg royal line}
-  \item{Par2}{Fathers of individuals in the Habsburg royal line}
+\item{Ind}{Names of individuals in the Habsburg royal line}
+\item{Par1}{Mothers of individuals in the Habsburg royal line}
+\item{Par2}{Fathers of individuals in the Habsburg royal line}
 }
 }
 \usage{
