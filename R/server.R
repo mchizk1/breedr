@@ -29,7 +29,7 @@ server <- function(input, output, session){
 
   # Output for debugging
   output$debug <- shiny::renderPrint({
-    input$ortn
+    str(input$breedr_records)
   })
   outputOptions(output, 'fileUploaded', suspendWhenHidden=FALSE)
 }
