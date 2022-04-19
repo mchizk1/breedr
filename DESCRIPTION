@@ -13,6 +13,7 @@ Imports:
     bslib,
     DiagrammeR,
     dplyr,
+    furrr,
     htmlwidgets,
     magrittr,
     purrr,
