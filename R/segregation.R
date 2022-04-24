@@ -188,6 +188,12 @@ multilocus <- function(ploidy, loci){
 # }
 # use_data(multilocus_table, internal = T, overwrite = T)
 
+#' Expected segregation ratios considering multiple loci.
+#'
+#' This currently a low-level function called by xplotter that is not intended for direct use
+#'
+#' @export
+
 multi_seg <- function(parent1, parent2, ploidy, loci){
   parent1_sep <- substring(parent1, seq(1, ((ploidy*loci)-(ploidy-1)), ploidy),
                        seq(ploidy, ploidy*loci, ploidy))
