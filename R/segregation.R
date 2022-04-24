@@ -44,7 +44,7 @@ seg_ratio <- function(parent1, parent2=parent1, ploidy=NULL){
   alleles <- c(unlist(stringr::str_split(parent1, "")),
                unlist(stringr::str_split(parent2, ""))) %>%
     unique() %>%
-    sort()
+    sort(decreasing = T)
   assertthat::assert_that(length(alleles) <= 2, msg = "Locus cannot have more than two alleles")
   if(length(alleles)==2){
     gametes1 <- gamete_ratio(parent1, ploidy)
@@ -55,7 +55,7 @@ seg_ratio <- function(parent1, parent2=parent1, ploidy=NULL){
     ))
     geno_mat <- purrr::cross2(gametes1, gametes2) %>%
       purrr::map(~ unlist(.)  %>%
-            sort %>%
+            sort(decreasing = T) %>%
             stringr::str_flatten()) %>%
       unlist() %>%
       table %>%
@@ -165,3 +165,48 @@ heterozygosity <- function(geno_vec){
     `/`(length(no_na))
 }
 
+###################################################################################################
+#  Functions applying segregation ratios to multiple loci
+###################################################################################################
+
+multilocus <- function(ploidy, loci){
+  alleles1 <- purrr::map(letters[1:loci], ~ str_flatten(rep(., ploidy/2)))
+  alleles2 <- purrr::map(LETTERS[1:loci], ~ str_flatten(rep(., ploidy/2)))
+  parents <- paste0(alleles1, alleles2)
+  seg <- purrr::map(parents, ~ seg_ratio(.)$Genotype) %>%
+    purrr::cross() %>%
+    purrr::map(~ stringr::str_flatten(.)) %>%
+    unlist()
+  return(seg)
+}
+
+#Precalculating an index for genotype input options
+# multilocus_table <- list()
+# for (i in 1:4) {
+#   multilocus_table[[i]] <- map(c(2, 4, 6, 8, 10), ~ multilocus(., i))
+#   names(multilocus_table[[i]]) <- c(2, 4, 6, 8, 10)
+# }
+# use_data(multilocus_table, internal = T, overwrite = T)
+
+multi_seg <- function(parent1, parent2, ploidy, loci){
+  parent1_sep <- substring(parent1, seq(1, ((ploidy*loci)-(ploidy-1)), ploidy),
+                       seq(ploidy, ploidy*loci, ploidy))
+  parent2_sep <- substring(parent2, seq(1, ((ploidy*loci)-(ploidy-1)), ploidy),
+                       seq(ploidy, ploidy*loci, ploidy))
+  ratios <- purrr::map2(parent1_sep, parent2_sep, ~ seg_ratio(.x, .y) %>%
+                   na.omit %>%
+                   dplyr::mutate(Freq = (Freq/sum(Freq))))
+  classes <- ratios[[1]]$Genotype
+  freqs <- ratios[[1]]$Freq
+  if(loci > 1){
+    for(i in 2:(length(ratios))){
+      classes <- purrr::cross2(classes, ratios[[i]]$Genotype) %>%
+        purrr::map(~ stringr::str_flatten(.)) %>%
+        unlist()
+      freqs <- purrr::cross2(freqs, ratios[[i]]$Freq) %>%
+        purrr::map(~ prod(unlist(.))) %>%
+        unlist()
+    }
+  }
+  return(data.frame(Genotype = classes, Freq = freqs))
+}
