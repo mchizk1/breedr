@@ -10,6 +10,7 @@ An R package for analyzing and visualizing pedigrees
 * `breedr_COP()` - Computes a Coefficient of Parentage matrix from pedigree data
 * `replace_name()` - A function that replaces names using a key.  Helpful when going from selection numbers to cultivar names (similar to Excel's vlookup function).
 * `habsburg` - A small set of pedigree data from an infamously inbred royal family...
+* `xplotter()` - An interactive GUI for crossing simulations
 
 ### Installation Instructions
 
