@@ -158,11 +158,28 @@ geno_table <- function(ploidy){
   return(seg_ratios)
 }
 
-heterozygosity <- function(geno_vec){
-  no_na <- na.omit(geno_vec)
-  (!(no_na %in% c(0,4))) %>%
-    sum() %>%
-    `/`(length(no_na))
+#' Computes heterozygosity
+#'
+#' This function takes a vector of SNP calls at and returns the heterozygosity of that individual
+#'
+#' @param geno_vec A vector of either integer or character values indicating the form
+#' of the allele
+#' @param ploidy A positive integer indicating the ploidy level of the parents and progeny.  Only required if
+#' parental genotypes are integers.
+#' @return A numeric indicating the proportion of loci that are heterozygous
+#' @export
+
+heterozygosity <- function(geno_vec, ploidy){
+  geno_vec = na.omit(geno_vec)
+  if(is.numeric(geno_vec)){
+    H = sum(geno_vec != 0 & geno_vec != ploidy)/length(geno_vec)
+  } else if(is.character(geno_vec)){
+    H = (purrr::map_int(stringr::str_split(geno_vec, ""), ~ unique(.) %>%
+                          length) > 1) %>%
+      sum() %>%
+      `/` (length(geno_vec))
+  }
+  return(H)
 }
 
 ###################################################################################################
