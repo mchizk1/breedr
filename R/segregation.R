@@ -210,7 +210,7 @@ sim_progeny <- function(p1, p2, ploidy){
 
 possible_geno <- function(p1, p2, ploidy){
   geno_prob <- seg_ratio(p1, p2, ploidy) %>%
-    mutate(Freq = Freq / sum(Freq, na.rm = T)) %>%
+    dplyr::mutate(Freq = Freq / sum(Freq, na.rm = T)) %>%
     na.omit()
   if(nrow(geno_prob) > 1){
     o1 <- sample(geno_prob$Genotype, 1, F, prob = geno_prob$Freq)
