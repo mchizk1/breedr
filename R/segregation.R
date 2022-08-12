@@ -182,6 +182,30 @@ heterozygosity <- function(geno_vec, ploidy){
   return(H)
 }
 
+#' Sampling random progeny of parents
+#'
+#' This function takes a pair of parent SNPs and outputs a randomly sampled offspring
+#'
+#' @param p1 A numeric or character indicating the first parental genotype
+#' @param p2 A numeric or character indicating the second parental genotype
+#' @param ploidy A positive integer indicating the ploidy level of the parents and progeny.
+#' @return a randomly sampled progeny genotype
+#' @export
+
+possible_geno <- function(p1, p2, ploidy){
+  geno_prob <- seg_ratio(p1, p2, ploidy) %>%
+    mutate(Freq = Freq / sum(Freq, na.rm = T)) %>%
+    na.omit()
+  if(nrow(geno_prob) > 1){
+    o1 <- sample(geno_prob$Genotype, 1, F, prob = geno_prob$Freq)
+  } else {
+    o1 <- geno_prob$Genotype
+  }
+  return(o1)
+}
+
+
+
 ###################################################################################################
 #  Functions applying segregation ratios to multiple loci
 ###################################################################################################
