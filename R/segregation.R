@@ -182,15 +182,31 @@ heterozygosity <- function(geno_vec, ploidy){
   return(H)
 }
 
-#' Sampling random progeny of parents
+possible_geno <- function(p1, p2, ploidy){
+  geno_prob <- seg_ratio(p1, p2, ploidy) %>%
+    mutate(Freq = Freq / sum(Freq, na.rm = T)) %>%
+    na.omit()
+  if(nrow(geno_prob) > 1){
+    o1 <- sample(geno_prob$Genotype, 1, F, prob = geno_prob$Freq)
+  } else {
+    o1 <- geno_prob$Genotype
+  }
+  return(o1)
+}
+
+#' Sampling random progeny of given parents
 #'
-#' This function takes a pair of parent SNPs and outputs a randomly sampled offspring
+#' This function takes a pair of parent SNP vectors and outputs a randomly sampled progeny
 #'
-#' @param p1 A numeric or character indicating the first parental genotype
-#' @param p2 A numeric or character indicating the second parental genotype
+#' @param p1 A numeric or character vector indicating the first parental genotype
+#' @param p2 A numeric or character vector indicating the second parental genotype
 #' @param ploidy A positive integer indicating the ploidy level of the parents and progeny.
-#' @return a randomly sampled progeny genotype
+#' @return A vector of randomly sampled progeny genotype
 #' @export
+
+sim_progeny <- function(p1, p2, ploidy){
+  purrr::map2_chr(p1, p2, ~ possible_geno(.x, .y, ploidy))
+}
 
 possible_geno <- function(p1, p2, ploidy){
   geno_prob <- seg_ratio(p1, p2, ploidy) %>%
