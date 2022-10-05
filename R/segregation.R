@@ -102,8 +102,14 @@ validate_cross <- function(geno, parent1, parent2, ploidy, reference){
   # return(ratios)
 }
 
+#' Checking genotypic data against expected ratios.
+#'
+#' This function is a work in progress
+#'
+#' @export
+
 check_crosses <- function(geno, breedr, ploidy=NULL, nc=1){
-  future::plan(multisession, workers = nc)
+  future::plan("multisession", workers = nc)
   genos <- colnames(geno)[-1:-3]
   in_breedr <- dplyr::filter(breedr, Ind %in% genos[genos %in% breedr$Ind]) %>%
     na.omit() %>%
